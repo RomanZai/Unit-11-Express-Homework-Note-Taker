@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tables Page</title>
+
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/sketchy/bootstrap.min.css" rel="stylesheet" integrity="sha384-N8DsABZCqc1XWbg/bAlIDk7AS/yNzT5fcKzg/TwfmTuUqZhGquVmpb5VvfmLcMzp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="jumbotron">
+      <h1 class="text-center">Notebook</h1>
+
+      <div class="text-center">
+        <a href="/index"><button class="btn btn-lg btn-primary"><span class="fa fa-list-alt"></span> Home</button></a>
+      </div>
+    </div>
+
+    <div class="list-group" id="noteslist">
+      </div>
+
+    <footer class="footer">
+      <div class="container">
+        <p><a href="/api/notes">API Notes Link</a> | <a href="#" id="clear">Clear Notes</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script type="text/javascript">
+
+    function runNotesQuery() {
+
+      $.ajax({ url: "/api/notes", method: "GET" })
+        .then(function(notesData) {
+  
+          console.log(notesData);
+          console.log("------------------------------------");
+  
+          for (var i = 0; i < notesData.length; i++) {
+  
+            var noteslist = $("#noteslist");
+  
+            var listItem = $("<a class='list-group-item list-group-item-action flex-column align-items-start'>");
+  
+            listItem.append(
+              $("<p class='mb-1'>").text(notesData[i].customerNotes),
+            );
+  
+            noteslist.append(listItem);
+          }
+        });
+    }
+
+    function clearNotes() {
+    alert("Clearing...");
+
+    $.ajax({ url: "/api/clear", method: "POST" }).then(function() {
+       $("#tableList").empty();
+    });
+  }
+
+  $("#clear").on("click", clearNotes);
+
+    runNotesQuery();
+ 
+ </script>
+
+</body>
+</html>
